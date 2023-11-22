@@ -1,7 +1,7 @@
 {
   "name": "cceditor",
   "version": "0.1.0",
-  "description": "A simple cceditor",
+  "description": "A simple editor",
   "private": true,
   "author": {
     "name": "Cnily03",
@@ -18,7 +18,8 @@
     "electron:build-vue": "set OUTPUT_DIR=web && vue-cli-service build",
     "electron:make": "electron-builder --config ./electron-builder.config.js --publish=never",
     "build": "npm run electron:build-vue && npm run electron:make && rm -rf web",
-    "test": "set NODE_ENV=development && concurrently --kill-others \"npm run vue:serve\" \"electron .\""
+    "test": "set NODE_ENV=development && concurrently --kill-others \"npm run vue:serve\" \"electron .\"",
+    "electron:test": "set NODE_ENV=development && electron ."
   },
   "engines": {
     "node": ">=16.18.0"
@@ -29,6 +30,12 @@
     "copy-webpack-plugin": "^11.0.0",
     "core-js": "^3.8.3",
     "electron-squirrel-startup": "^1.0.0",
+    "mime": "^3.0.0",
+    "monaco-editor": "^0.44.0",
+    "monaco-editor-esm-webpack-plugin": "^2.1.0",
+    "monaco-editor-nls": "^3.1.0",
+    "monaco-editor-webpack-plugin": "^7.1.0",
+    "postcss-calc": "^9.0.1",
     "sass": "^1.32.7",
     "sass-loader": "^12.0.0",
     "vue": "^3.2.13",
@@ -39,7 +46,7 @@
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-plugin-router": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
-    "concurrently": "^8.2.1",
+    "concurrently": "^8.2.2",
     "electron": "^26.3.0",
     "electron-builder": "^24.6.4",
     "eslint": "^7.32.0",

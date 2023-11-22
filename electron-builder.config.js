@@ -13,8 +13,10 @@ module.exports = {
     npmRebuild: isDev ? false : true,
     files: [
         'web/**/*',
+        'electron/**/*',
         "index.js",
-        "!**/node_modules/**/*"
+        "!**/node_modules/**/*",
+        "node_modules/mime/**/*",
     ],
     extraResources: [{
         from: icon_path,
@@ -26,7 +28,7 @@ module.exports = {
             target: "nsis",
             arch: [
                 "x64",
-                "ia32"
+                // "ia32"
             ]
         }
     }

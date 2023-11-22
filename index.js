@@ -3,6 +3,13 @@ const path = require('path')
 const fs = require('fs')
 const { pathToFileURL, fileURLToPath } = require('url')
 const isDev = process.env.NODE_ENV?.trim() === 'development'
+const { menu } = require('./electron/menu.js')
+const { askQuit } = require('./electron/event.js')
+
+global.quit = true
+global.app = app
+
+require("./electron/ipc-main-event.js")
 
 // Register protocol
 protocol.registerSchemesAsPrivileged([
@@ -18,7 +25,7 @@ protocol.registerSchemesAsPrivileged([
 
 app.whenReady().then(() => {
     protocol.handle('cceditor', req => {
-        const { host, pathname } = new URL(req.url)
+        const { host, pathname, searchParams } = new URL(req.url)
         if (host === "static") { // Root directory of installed app
             return new Promise(resolve => {
                 fs.readFile(path.join(path.dirname(app.getPath('exe')), pathname), (err, data) => {
@@ -59,16 +66,25 @@ app.whenReady().then(() => {
 
     // Create a window
     const win = new BrowserWindow({
-        width: 400,
-        height: 800,
+        width: 1920 * 0.7,
+        height: 1080 * 0.7,
         icon: path.resolve(__dirname, './web/favicon.ico'),
         webPreferences: {
             nodeIntegration: true,
+            preload: path.resolve(__dirname, './electron/preload.js'),
             webSecurity: isDev ? false : true, // Dev 环境关闭跨域限制
         }
     })
 
-    if (!isDev) win.setMenu(null)
+    global.win = win
+
+    win.on('close', (e) => {
+        if (global.quit) return
+        e.preventDefault()
+        askQuit()
+    })
+
+    win.setMenu(menu)
 
     // DEV: 默认打开开发者工具
     if (isDev) win.webContents.openDevTools()
